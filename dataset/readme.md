@@ -47,7 +47,19 @@ NASA 电池随机使用数据集
         ├── RW_Skewed_Low_40C_DataSet_2Post.zip
         └── RW_Skewed_Low_Room_Temp_DataSet_2Post.zip
 
-
+- 实验数据结构  
+    每个大folder都对应一种充放电的模式（电流电压大小，环境温度，是否RW）
+    - RW的实验模式：
+        ```python
+        for cycle in range(num_outer_cycle):
+            # 随机充放电
+            for i in range(50):
+                RW_discharge_cycle()
+            # 用于测定当前状态
+            reference_charge_and_discharge_cycle()      # 恒流放电，测得当前容量
+            reference_constant_power_discharge_cycle()  # 恒定功率放电，测得当前容量
+            reference_pulsed_current_discharge_cycle()  # 测内阻，不用管
+        ```
 
 NASA备用下载网站
 ---------------
