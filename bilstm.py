@@ -4,6 +4,10 @@ import torchvision.datasets as dsets
 import torchvision.transforms as transforms
 from torch.autograd import Variable
 
+import scipy.io as scio
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 # feed in tensor data with shape ([batch_size, sequence_length, input_features])
 class BiLSTM(nn.Module):
