@@ -1,0 +1,319 @@
+# coding:UTF-8
+#%% 导入模块
+import scipy.io as scio
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+
+# %% [markdown] 随机放电 RW
+# # 随机放电 RW
+
+#%% 导入文件 
+dataFile = r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat"
+data = scio.loadmat(dataFile)
+
+#%% 读取，预览数据
+# # print(data.keys())  # ['__header__', '__version__', '__globals__', 'data'])
+# # print(data["data"].dtype)  # ('step', 'O'), ('procedure', 'O'), ('description', 'O')
+# # print(data["data"]["step"].dtype)   # object
+# # print(data["data"]["step"].shape)   # (1,1)
+# print(data["data"]["step"][0, 0].dtype)     
+# # [('comment', 'O'), ('type', 'O'), ('time', 'O'), ('relativeTime', 'O'), ('voltage', 'O'), ('current', 'O'), ('temperature', 'O'), ('date', 'O')]
+# print(data["data"]["step"][0, 0].shape)     # (1,23659)
+# print(np.unique(data["data"]["step"][0, 0]['comment']))    # 数据的类型
+# i = num_of_cycle = 0 # 根据时间排序的
+# #     data["data"]["step"][0, 0]['attribute']   [0,num_of_cycle].shape
+# print(data["data"]["step"][0, 0]['comment']     [0,i].shape)    # (1,)
+# print(data["data"]["step"][0, 0]['type']        [0,i].shape)    # (1,)
+# print(data["data"]["step"][0, 0]['relativeTime'][0,i].shape)    # (1, 176)
+# print(data["data"]["step"][0, 0]['voltage']     [0,i].shape)    # (1, 176)
+# print(data["data"]["step"][0, 0]['current']     [0,i].shape)    # (1, 176)
+# print(data["data"]["step"][0, 0]['temperature'] [0,i].shape)    # (1, 176)
+# print(data["data"]["step"][0, 0]['date']        [0,i].shape)    # (1,)
+
+# print(data["data"]["step"][0, 0]['relativeTime'][0,i])          # (1, 176)
+# print(data["data"]["step"][0, 0]['voltage']     [0,i])          # (1, 176)
+# print(data["data"]["step"][0, 0]['current']     [0,i])          # (1, 176)
+# print(data["data"]["step"][0, 0]['temperature'] [0,i])          # (1, 176)
+
+# #%% 
+# plt.plot(data["data"]["step"][0, 0]['relativeTime'][0,172][0,:],
+#          data["data"]["step"][0, 0]['voltage']     [0,172][0,:],)
+# plt.show()
+# plt.plot(data["data"]["step"][0, 0]['relativeTime'][0,172][0,:],
+#          data["data"]["step"][0, 0]['current']     [0,172][0,:],)
+# plt.show()
+# plt.plot(data["data"]["step"][0, 0]['relativeTime'][0,172][0,:],
+#          data["data"]["step"][0, 0]['temperature'] [0,172][0,:],)
+# plt.show()
+
+#%% 操作类型和数据属性
+
+useful_comments = [
+    'charge (after random walk discharge)',
+    'discharge (random walk)',
+    # 'pulsed load (discharge)',
+    # 'pulsed load (rest)',
+    # 'reference charge',
+    # 'reference discharge',
+    # 'reference power discharge',
+    # 'rest (random walk)',
+    # 'rest post pulsed load',
+    # 'rest post random walk discharge',
+    # 'rest post reference charge',
+    # 'rest post reference discharge',
+    # 'rest post reference power discharge',
+    # 'rest prior reference discharge'
+]
+
+# comment      = data["data"]["step"][0, 0]['comment']     [0,i][0]
+# type         = data["data"]["step"][0, 0]['type']        [0,i][0]
+# relativeTime = data["data"]["step"][0, 0]['relativeTime'][0,i][0,:]   # 最后一步索引得到一维数组(107,)，否则是(1,107)
+# voltage      = data["data"]["step"][0, 0]['voltage']     [0,i][0,:]   # 最后一步索引得到一维数组(107,)，否则是(1,107)
+# current      = data["data"]["step"][0, 0]['current']     [0,i][0,:]   # 最后一步索引得到一维数组(107,)，否则是(1,107)
+# temperature  = data["data"]["step"][0, 0]['temperature'] [0,i][0,:]   # 最后一步索引得到一维数组(107,)，否则是(1,107)
+# date         = data["data"]["step"][0, 0]['date']        [0,i][0]
+
+attributes = [  
+# 'comment',    # 没必要
+'time',
+# 'type',       # 没必要
+'relativeTime',
+'voltage',
+'current',
+'temperature',
+# 'date'        # 没必要
+]
+
+
+#%% 数据信息提取模板
+def info():
+    # 每个大cycle的记录
+    ref_idx = 0
+    cycle_record = {x[0]:{'num':0,
+                            # 'value':{attribute:[] for attribute in attributes}
+                        }for x in np.unique(data["data"]["step"][0, 0]['comment'])}
+    # 全部信息的记录
+    record = {x[0]:0 for x in np.unique(data["data"]["step"][0, 0]['comment'])}
+
+    # 对每一条操作进行遍历
+    for i in range(data["data"]["step"][0, 0].shape[1]):
+
+        # 当前操作信息处理
+        cur = data["data"]["step"][0, 0]['comment'][0,i][0]
+        cycle_record[cur]['num']+=1
+        record[cur]+=1
+
+        # 如果是有用的操作，则记录下这条操作的所有信息
+        if cur == useful_comments:
+            for attribute in attributes:
+                cycle_record[ref_idx][cur]['value'][attribute].append(data["data"]["step"][0,0][attribute][0,i][0,:])
+
+        # 如果出现 'rest prior reference discharge'（大循环开始标志），则处理上一个大循环的信息，并重置大循环记录 
+        if cur == 'rest prior reference discharge':
+            # 打印当前大循环记录的信息
+            print('\n'+'='*20+f'cycle {ref_idx}'+'='*20)
+            for x in cycle_record:
+                print(f'{x}:{cycle_record[x]["num"]}')
+            # 重置大循环记录
+            ref_idx += 1    # 当前大循环数
+            cycle_record = {x[0]:{'num':0,
+                                    # 'value':{attribute:[] for attribute in attributes}
+                                }for x in np.unique(data["data"]["step"][0, 0]['comment'])}
+    # 输出全部信息
+    print('\n'+'='*20+f' overall '+'='*20)
+    for x in record:
+        print(f'{x}:{record[x]}')
+
+
+#%% 有效数据提取
+
+# 定义记录的类
+class RW_cycle:
+    def __init__(self,idx):
+        self.idx = idx
+        self.charge = None
+        self.discharge= []
+        self.merged_discharge= []
+
+    @property
+    def num_discharges(self):
+        return len(self.discharge)
+    
+    def __repr__(self):
+        return f"No.{self.idx} {0 if self.charge is None else 1}C {self.discharge.__len__()}D"
+
+class Data:
+    def __init__(self):
+        self.all_useful=[]
+        self.merged_all_useful=[]
+        self.RW_cycles = [RW_cycle(idx) for idx in range(0,52)]
+        self.cur = 0
+    
+    @property
+    def cur_cycle(self):
+        return self.RW_cycles[self.cur]
+    
+    @property
+    def num_RW_cycles(self):
+        return self.RW_cycles.__len__()
+
+    @property
+    def num_useful_info(self):
+        return self.all_useful.__len__()
+
+    def next_RW_cycle(self):
+        self.cur += 1
+    
+    def __repr__(self):
+        return  f'{self.num_useful_info} useful infos'
+
+class Cycle_record:
+    def __init__(self,a):
+        self.ref_idx = 0
+        self.num = 0
+        self.capacity = 0
+        self.data = Data()
+    def __repr__(self):
+        return f'{self.num} infos, capacity={self.capacity:.3f}'
+
+# 记录的实例
+cycle_records = [Cycle_record(a) for a in range(13)]
+ref_idx = 0
+record = {x[0]:0 for x in np.unique(data["data"]["step"][0, 0]['comment'])} # 全局统计
+
+# 对每一条操作进行遍历
+for i in range(data["data"]["step"][0, 0].shape[1]):
+
+    # 当前操作信息处理
+    cur = data["data"]["step"][0, 0]['comment'][0,i][0]         # 是操作的类型，如'rest (random walk)'
+    cycle_records[ref_idx].num += 1
+    record[cur]+=1
+
+    # 如果是有用的操作，则记录下这条操作的所有信息
+    if cur in useful_comments:
+        cur_data = np.concatenate(
+                    tuple(data["data"]["step"][0,0][attribute][0,i] for attribute in attributes)
+                    )
+        if cur == 'charge (after random walk discharge)':
+            cycle_records[ref_idx].data.next_RW_cycle()
+            cycle_records[ref_idx].data.cur_cycle.charge = cur_data
+        if cur == 'discharge (random walk)':
+            cycle_records[ref_idx].data.cur_cycle.discharge.append(cur_data)
+        cycle_records[ref_idx].data.all_useful.append(cur_data)
+
+    # 如果是'reference discharge'，则算出capacity
+    if cur == 'reference discharge':
+        capacity = np.trapz(
+                            data["data"]["step"][0,0]['current']     [0,i][0,:],
+                            data["data"]["step"][0,0]['relativeTime'][0,i][0,:]/3600,
+                            )
+        cycle_records[ref_idx].capacity = capacity
+        print(f'reference discharge at {i} capacity is {capacity:.5f}')
+
+    # 如果出现 'rest post pulsed load'（大循环结束标志），则处理上一个大循环的信息，并重置大循环记录 
+    if cur == 'rest post pulsed load':
+        # 打印当前大循环记录的信息
+        cycle_records[ref_idx].ref_idx = ref_idx
+        print('='*20+f"     {cycle_records[ref_idx].ref_idx} "+'='*20)
+        print(f"num is      {cycle_records[ref_idx].num}")
+        print(f"capacity is {cycle_records[ref_idx].capacity:.5f}")
+        print(f"data is     {cycle_records[ref_idx].data}")
+        # 重置大循环记录
+        ref_idx += 1    # 当前大循环数
+
+# 输出全局统计
+print('\n'+'='*20+f' overall '+'='*20)
+for x in record:
+    print(f'{x}:{record[x]}')
+
+#%% 数据合并处理
+
+# 缺失值删除
+for ref_idx in range(len(cycle_records)-1,-1,-1):
+    if cycle_records[ref_idx].num == 0:
+        del cycle_records[ref_idx]
+        continue
+    for idx in range(cycle_records[ref_idx].data.num_RW_cycles-1,-1,-1):
+        if cycle_records[ref_idx].data.RW_cycles[idx].charge is None:
+            del cycle_records[ref_idx].data.RW_cycles[idx]
+            continue
+
+# 合并一个RWcycle中的discharge
+for ref_idx in range(len(cycle_records)):
+    for idx in range(cycle_records[ref_idx].data.num_RW_cycles):
+        try:
+            cycle_records[ref_idx].data.RW_cycles[idx].merged_discharge = np.concatenate(
+                tuple(cycle_records[ref_idx].data.RW_cycles[idx].discharge[i] for i in range(cycle_records[ref_idx].data.RW_cycles[idx].num_discharges)),axis=1
+            )
+        except Exception as e:
+            print(f"{e} at ref_idx:{ref_idx},idx:{idx}")
+
+# all合并（时间间隔一样，插值）
+for ref_idx in range(len(cycle_records)):
+    try:
+        cycle_records[ref_idx].data.merged_all_useful = np.concatenate(
+            tuple(cycle_records[ref_idx].data.all_useful[i] for i in range(cycle_records[ref_idx].data.num_useful_info)),axis=1
+        )
+    except Exception as e:
+        print(f"{e} at ref_idx:{ref_idx}")
+
+
+
+# 填补SOH空缺值（插值）
+
+
+
+
+
+pass
+#%% [markdown]
+
+# ```python
+# class RW_cycle:
+#     def __init__(self,idx):
+#         self.idx = idx
+#         self.charge = None
+#         self.discharge= []
+#     def __repr__(self):
+#         return f"No.{self.idx} {0 if self.charge is None else 1}C {self.discharge.__len__()}D"
+
+# class Data:
+#     def __init__(self):
+#         self.all_useful=[]
+#         self.RW_cycles = [RW_cycle(idx) for idx in range(0,52)]
+#         self.cur = 0
+    
+#     @property
+#     def cur_cycle(self):
+#         return self.RW_cycles[self.cur]
+    
+#     def next_RW_cycle(self):
+#         self.cur += 1
+    
+#     def __repr__(self):
+#         return  f'all_useful {self.all_useful.__len__()} infos'
+
+# class Cycle_record:
+#     def __init__(self,a):
+#         self.ref_idx = 0
+#         self.num = 0
+#         self.capacity = 0
+#         self.data = Data()
+#     def __repr__(self):
+#         return f'{self.num.__len__()} infos, capacity={self.capacity}'
+
+# class Cycle_record:
+#     def __init__(self,a):
+#         self.ref_idx = 0
+#         self.num = 0
+#         self.capacity = 0
+#         self.data = Data()
+# cycle_records[ref_idx].ref_idx  -> int
+# cycle_records[ref_idx].num      -> int
+# cycle_records[ref_idx].capacity -> float 
+# # cycle_records[ref_idx].data
+# cycle_records[ref_idx].data.all_useful ->list(np.ndarray)
+# cycle_records[ref_idx].data.RW_cycles[idx].charge -> np.ndarray
+# cycle_records[ref_idx].data.RW_cycles[idx].discharge -> list(np.ndarray)
+# ```

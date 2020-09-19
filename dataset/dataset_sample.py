@@ -17,9 +17,11 @@ data = scio.loadmat(dataFile)
 # print(data["data"]["step"].shape)   # (1,1)
 print(data["data"]["step"][0, 0].dtype)     # [('comment', 'O'), ('type', 'O'), ('time', 'O'), ('relativeTime', 'O'), ('voltage', 'O'), ('current', 'O'), ('temperature', 'O'), ('date', 'O')]
 print(data["data"]["step"][0, 0].shape)     # (1,23659)
+print(np.unique(data["data"]["step"][0, 0]['comment']))    # (1,)
+#%%
 
 #     data["data"]["step"][0, 0]['attribute']   [0,num_of_cycle].shape
-i = num_of_cycle = 0
+i = num_of_cycle = 0 # 根据时间排序的
 print(data["data"]["step"][0, 0]['comment']     [0,i].shape)    # (1,)
 print(data["data"]["step"][0, 0]['type']        [0,i].shape)    # (1,)
 print(data["data"]["step"][0, 0]['relativeTime'][0,i].shape)    # (1, 176)

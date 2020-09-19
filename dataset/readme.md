@@ -54,12 +54,19 @@ NASA 电池随机使用数据集
         for cycle in range(num_outer_cycle):
             # 随机充放电
             for i in range(50):
-                RW_discharge_cycle()
+                RW_discharge_until_threshold()
+                charge_to_full()
             # 用于测定当前状态
             reference_charge_and_discharge_cycle()      # 恒流放电，测得当前容量
             reference_constant_power_discharge_cycle()  # 恒定功率放电，测得当前容量
             reference_pulsed_current_discharge_cycle()  # 测内阻，不用管
         ```
+
+- 处理方法
+    RW中，充放电分别提取整合。
+        充电：采样 6/s，时长 60s*(10~25)min
+        放电：采样 1/s，时长 ~60min
+    测定的结果（SOH）通过插值法对应到每一段RW中
 
 NASA备用下载网站
 ---------------
