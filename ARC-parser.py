@@ -5,6 +5,7 @@ REMEMBER TO MODIFY THE PATH BEFORE RUNNING!
 import scipy.io as scio
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.preprocessing import MinMaxScaler
 
 dataFile = '/Users/kanya/Projects/NN4SOH/dataset/ARC-FY/B0005'   # Modify this path
 raw = scio.loadmat(dataFile)['B0005'][0][0][0][0]
@@ -26,27 +27,29 @@ data = []
 # calculate SOHs
 for lb in range(len(labels)):
     labels[lb] = labels[lb][0] / 1.856487420818157  # TODO: first (largest) capacity found, but probably not the full cp
+labels = labels * 3
 
-for cy in cycles:
-    t = 0
-    t_limit = 4000  # TODO: this parameter can be further tuned
-    cursor = 0
-    cy_new = []
-    while cursor <= len(cy[0][0]) and t <= t_limit:
-        while cy[5][0][cursor] <= t:
-            cursor += 1
-        x1 = cy[5][0][cursor - 1]
-        x2 = cy[5][0][cursor]
-        point = []
-        for i in range(3):
-            y1 = cy[i][0][cursor - 1]
-            y2 = cy[i][0][cursor]
-            y = (t - x1) * (y2 - y1) / (x2 - x1) + y1
-            point.append(y)
-        cy_new.append(point)
-        cursor -= 1
-        t += 10
-    data.append(cy_new)
+for t0 in [0, 1.5, 3]:
+    for cy in cycles:
+        t = t0
+        t_limit = 4000 + t0  # TODO: this parameter can be further tuned
+        cursor = 0
+        cy_new = []
+        while cursor <= len(cy[0][0]) and t <= t_limit:
+            while cy[5][0][cursor] <= t:
+                cursor += 1
+            x1 = cy[5][0][cursor - 1]
+            x2 = cy[5][0][cursor]
+            point = []
+            for i in range(3):
+                y1 = cy[i][0][cursor - 1]
+                y2 = cy[i][0][cursor]
+                y = (t - x1) * (y2 - y1) / (x2 - x1) + y1
+                point.append(y)
+            cy_new.append(point)
+            cursor -= 1
+            t += 10
+        data.append(cy_new)
 
 # plot part of the (voltage) data by order
 # i = 0
@@ -60,26 +63,19 @@ for cy in cycles:
 #     i += 10
 
 # Expand dataset by changing the starting point
-for cy in cycles:
-    t = 3
-    t_limit = 4003
-    cursor = 0
-    cy_new = []
-    while cursor <= len(cy[0][0]) and t <= t_limit:
-        while cy[5][0][cursor] <= t:
-            cursor += 1
-        x1 = cy[5][0][cursor - 1]
-        x2 = cy[5][0][cursor]
-        point = []
-        for i in range(3):
-            y1 = cy[i][0][cursor - 1]
-            y2 = cy[i][0][cursor]
-            y = (t - x1) * (y2 - y1) / (x2 - x1) + y1
-            point.append(y)
-        cy_new.append(point)
-        cursor -= 1
-        t += 10
-    data.append(cy_new)
 
-data = np.array(data)
-print(data.shape)
+# shape: (495, 401, 3)
+
+for i in range(len(data)):
+    mm = MinMaxScaler()
+    data[i] = mm.fit_transform(data[i])
+
+data_set = list(zip(data, labels))
+np.random.shuffle(data_set)
+train_set = data_set[:400]
+valid_set = data_set[400: 450]
+test_set = data_set[450:]
+for v in np.random.randint(0, 400, 25):
+    valid_set.append(data_set[v])
+for t in np.random.randint(0, 450, 30):
+    test_set.append(data_set[t])
