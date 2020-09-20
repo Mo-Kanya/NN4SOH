@@ -235,7 +235,6 @@ for x in record:
     print(f'{x}:{record[x]}')
 
 #%% 数据合并处理
-
 # 缺失值删除
 for ref_idx in range(len(cycle_records)-1,-1,-1):
     if cycle_records[ref_idx].num == 0:
@@ -266,9 +265,7 @@ for ref_idx in range(len(cycle_records)):
         print(f"{e} at ref_idx:{ref_idx}")
 
 
-#%%
-# 填补SOH空缺值（插值）
-
+#%% 填补SOH空缺值（插值）
 # ref中测定的capacity和对应时间
 t_p=[]
 capacity_p=[]
@@ -346,17 +343,17 @@ def add_bias(array,
 
 print(f"{len(all_rw_cycles)} all_rw_cycles")
 
-expand_multiple = 60
+expand_multiple = 60    # 扩展的倍数
 new_rw_cycles = []
 for rw_cycle in all_rw_cycles:
     for i in range(expand_multiple-1):
         new_rw_cycle = RW_cycle(rw_cycle.idx+1000*i)
         new_rw_cycle.capacity = rw_cycle.capacity
 
-        noise_percent =     (random.random()-0.5)*0.02
-        voltage_bias =      (random.random()-0.5)*0.1
-        current_bias =      (random.random()-0.5)*0.005
-        temperature_bias =  (random.random()-0.5)*2.5
+        noise_percent =     (random.random()-0.5)*0.02      # 白噪声强度
+        voltage_bias =      (random.random()-0.5)*0.1       # 各项的偏移量
+        current_bias =      (random.random()-0.5)*0.005     # 各项的偏移量
+        temperature_bias =  (random.random()-0.5)*2.5       # 各项的偏移量
         new_charge = add_noise(rw_cycle.charge,noise_percent)
         new_charge = add_bias( new_charge,voltage_bias,current_bias,temperature_bias)
         new_rw_cycle.charge = new_charge
@@ -374,53 +371,4 @@ print(f"{len(all_rw_cycles)} all_rw_cycles after expand")
 
 
 pass
-#%% [markdown]
-
-# ```python
-# class RW_cycle:
-#     def __init__(self,idx):
-#         self.idx = idx
-#         self.charge = None
-#         self.discharge= []
-#     def __repr__(self):
-#         return f"No.{self.idx} {0 if self.charge is None else 1}C {self.discharge.__len__()}D"
-
-# class Data:
-#     def __init__(self):
-#         self.all_useful=[]
-#         self.RW_cycles = [RW_cycle(idx) for idx in range(0,52)]
-#         self.cur = 0
-    
-#     @property
-#     def cur_cycle(self):
-#         return self.RW_cycles[self.cur]
-    
-#     def next_RW_cycle(self):
-#         self.cur += 1
-    
-#     def __repr__(self):
-#         return  f'all_useful {self.all_useful.__len__()} infos'
-
-# class Cycle_record:
-#     def __init__(self,a):
-#         self.ref_idx = 0
-#         self.num = 0
-#         self.capacity = 0
-#         self.data = Data()
-#     def __repr__(self):
-#         return f'{self.num.__len__()} infos, capacity={self.capacity}'
-
-# class Cycle_record:
-#     def __init__(self,a):
-#         self.ref_idx = 0
-#         self.num = 0
-#         self.capacity = 0
-#         self.data = Data()
-# cycle_records[ref_idx].ref_idx  -> int
-# cycle_records[ref_idx].num      -> int
-# cycle_records[ref_idx].capacity -> float 
-# # cycle_records[ref_idx].data
-# cycle_records[ref_idx].data.all_useful ->list(np.ndarray)
-# cycle_records[ref_idx].data.RW_cycles[idx].charge -> np.ndarray
-# cycle_records[ref_idx].data.RW_cycles[idx].discharge -> list(np.ndarray)
-# ```
+#%% 
