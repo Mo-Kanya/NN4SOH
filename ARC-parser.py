@@ -27,6 +27,7 @@ data = []
 # calculate SOHs
 for lb in range(len(labels)):
     labels[lb] = labels[lb][0] / 1.856487420818157  # TODO: first (largest) capacity found, but probably not the full cp
+labels = labels * 3
 
 for t0 in [0, 1.5, 3]:
     for cy in cycles:
@@ -69,10 +70,12 @@ for i in range(len(data)):
     mm = MinMaxScaler()
     data[i] = mm.fit_transform(data[i])
 
-train_set = data[:400]
-valid_set = data[400: 450]
-test_set = data[450:]
+data_set = list(zip(data, labels))
+np.random.shuffle(data_set)
+train_set = data_set[:400]
+valid_set = data_set[400: 450]
+test_set = data_set[450:]
 for v in np.random.randint(0, 400, 25):
-    valid_set.append(data[v])
+    valid_set.append(data_set[v])
 for t in np.random.randint(0, 450, 30):
-    test_set.append(data[t])
+    test_set.append(data_set[t])
