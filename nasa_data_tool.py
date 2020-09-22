@@ -234,6 +234,8 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
     for x in record:
         print(f'{x}:{record[x]}')
 
+
+
     #%% 数据合并处理
     # 缺失值删除
     for ref_idx in range(len(cycle_records)-1,-1,-1):
@@ -276,9 +278,10 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
     t_p=[]
     capacity_p=[]
     for i in range(len(cycle_records)):
-        if cycle_records[i].capacity is not 0:
+        if cycle_records[i].capacity !=  0:
             t_p.append(cycle_records[i].start_time)
             capacity_p.append(cycle_records[i].capacity)
+    init_capacity = capacity_p[0]
 
     # 需要插值的点，即RW_cycle对应的时间，以放电结束充电开始的时间点为准
     t = []
@@ -378,7 +381,7 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
     #%% 分类输出
     class SingleRecord:
         def __init__(self,type):
-            self.capacity = 0
+            self.SOH = 0
             self.data = None
             self.type = type
         
@@ -390,18 +393,18 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
     for rw_cycle in all_rw_cycles:
         charge_record = SingleRecord('C')
         charge_record.data = rw_cycle.charge[2:,:]
-        charge_record.capacity = rw_cycle.capacity
+        charge_record.SOH = rw_cycle.capacity / init_capacity
         all_charge_records.append(charge_record)
 
         for i in range(rw_cycle.merged_discharge.shape[1]//squence_length-1):
             discharge_record = SingleRecord('D')
             discharge_record.data = rw_cycle.merged_discharge[2:,i*squence_length:(i+1)*squence_length]
-            discharge_record.capacity = rw_cycle.capacity
+            discharge_record.SOH = rw_cycle.capacity / init_capacity
             all_discharge_records.append(discharge_record)
         if rw_cycle.merged_discharge.shape[1] % squence_length > squence_length*0.5:
             discharge_record = SingleRecord('D')
             discharge_record.data = rw_cycle.merged_discharge[2:,-squence_length:]
-            discharge_record.capacity = rw_cycle.capacity
+            discharge_record.SOH = rw_cycle.capacity / init_capacity
             all_discharge_records.append(discharge_record)
 
 
