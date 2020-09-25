@@ -205,8 +205,8 @@ class NeuralNetworkClassifier:
                 running_corrects = 0.0
                 with torch.no_grad():
                     for x, y in loader["test"]:
-                        b_size = len(y)
-                        total += len(y)
+                        x = x.to(self.device) if isinstance(x, torch.Tensor) else [i_val.to(self.device) for i_val in x]
+                        y = y.to(self.device)
                         # x=y[0]
                         # y=y[1]
                         # #x = x.to(self.device) if isinstance(x, torch.Tensor) else [i.to(self.device) for i in x]
