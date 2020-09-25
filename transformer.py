@@ -14,6 +14,7 @@ from SAnD.utils.trainer import NeuralNetworkClassifier
 
 # Real Dataset Generator
 dataFile = '/home/zhengshen/NN4SOH/dataset/ARC-FY/B0005'   # Modify this path
+# dataFile = '/Users/jason/NN4SOH/dataset/ARC-FY/B0005'
 raw = scio.loadmat(dataFile)['B0005'][0][0][0][0]
 
 # raw data parsing
@@ -147,12 +148,13 @@ clf = NeuralNetworkClassifier(
 # training network
 clf.fit(
     {"train": train_loader,
-     "val": val_loader},
-    epochs=80
+     "val": val_loader,
+     "test": test_loader},
+    epochs=2
 )
 
 # evaluating
-clf.evaluate(test_loader)
+# clf.evaluate(test_loader)
 
 # save
 clf.save_to_file("save_params/")

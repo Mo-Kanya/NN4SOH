@@ -200,6 +200,33 @@ class NeuralNetworkClassifier:
 
                             self.experiment.log_metric("loss", val_loss.cpu().item(), step=epoch)
                             self.experiment.log_metric("accuracy", float(val_correct / val_total), step=epoch)
+            with self.experiment.test():
+                running_loss = 0.0
+                running_corrects = 0.0
+                with torch.no_grad():
+                    for x, y in loader["test"]:
+                        b_size = len(y)
+                        total += len(y)
+                        # x=y[0]
+                        # y=y[1]
+                        # #x = x.to(self.device) if isinstance(x, torch.Tensor) else [i.to(self.device) for i in x]
+                        # y = y.to(self.device)
+                        
+                        pbar.set_description("\033[32m"+"Evaluating"+"\033[0m")
+                        pbar.update(b_size)
+
+                        outputs = self.model(x)
+                        loss = self.criterion(outputs, y)
+                        _, predicted = torch.max(outputs, 1)
+                        correct += (predicted == y).sum().float().cpu().item()
+
+                        running_loss += loss.cpu().item()
+                        running_corrects += torch.sum(predicted == y).float().cpu().item()
+
+                        self.experiment.log_metric("loss", running_loss, step=epoch)
+                        self.experiment.log_metric("accuracy", float(running_corrects / total))
+                    pbar.close()
+                    acc = self.experiment.get_metric("accuracy")
 
             pbar.close()
 
