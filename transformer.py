@@ -81,9 +81,9 @@ y_test = labels[450:]
 train_ds = TensorDataset(x_train, y_train)
 val_ds = TensorDataset(x_val, y_val)
 test_ds = TensorDataset(x_test, y_test)
-train_loader = DataLoader(train_ds, batch_size=4)
-val_loader = DataLoader(val_ds, batch_size=4)
-test_loader = DataLoader(test_ds, batch_size=4)
+train_loader = DataLoader(train_ds, batch_size=1)
+val_loader = DataLoader(val_ds, batch_size=1)
+test_loader = DataLoader(test_ds, batch_size=1)
 
 # Fake Dataset Generater
 # x_train = torch.randn(1024, 256, 23)    # [N, seq_len, features]
@@ -114,7 +114,7 @@ num_layers = 4
 clf = NeuralNetworkClassifier(
     SAnD(in_feature, seq_len, n_heads, factor, num_class, num_layers),
     nn.MSELoss(),
-    optim.Adam, optimizer_config={"lr": 1e-5, "betas": (0.9, 0.98), "eps": 4e-09, "weight_decay": 5e-4},
+    optim.Adam, optimizer_config={"lr": 1e-4, "betas": (0.9, 0.98), "eps": 4e-09, "weight_decay": 5e-4},
     experiment=Experiment("8mKGHiYeg2P7dZEFlvQv3PEzc")
 )
 
@@ -148,7 +148,7 @@ clf = NeuralNetworkClassifier(
 clf.fit(
     {"train": train_loader,
      "val": val_loader},
-    epochs=100
+    epochs=80
 )
 
 # evaluating

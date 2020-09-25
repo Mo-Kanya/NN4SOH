@@ -102,12 +102,12 @@ class NeuralNetworkClassifier:
         self.__num_classes = None
         self._is_parallel = False
 
-        if torch.cuda.device_count() > 1:
-            self.model = nn.DataParallel(self.model)
-            self._is_parallel = True
+        # if torch.cuda.device_count() > 1:
+        #     self.model = nn.DataParallel(self.model)
+        #     self._is_parallel = True
 
-            notice = "Running on {} GPUs.".format(torch.cuda.device_count())
-            print("\033[33m" + notice + "\033[0m")
+        #     notice = "Running on {} GPUs.".format(torch.cuda.device_count())
+        #     print("\033[33m" + notice + "\033[0m")
 
     def fit(self, loader: Dict[str, DataLoader], epochs: int, checkpoint_path: str = None, validation: bool = True) -> None:
         """
