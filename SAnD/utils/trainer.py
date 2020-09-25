@@ -256,10 +256,10 @@ class NeuralNetworkClassifier:
                 pbar.close()
             acc = self.experiment.get_metric("accuracy")
 
-        print("\033[33m" + "Evaluation finished. " + "\033[0m" + "Accuracy: {:.4f}".format(acc))
+        print("\033[33m" + "Evaluation finished. " + "\033[0m" + "Loss: {:.4f}".format(loss))
 
         if verbose:
-            return acc
+            return loss
 
     def save_checkpoint(self) -> dict:
         """

@@ -148,7 +148,7 @@ clf = NeuralNetworkClassifier(
 clf.fit(
     {"train": train_loader,
      "val": val_loader},
-    epochs=1
+    epochs=100
 )
 
 # evaluating
