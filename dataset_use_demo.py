@@ -3,7 +3,7 @@ from nasa_data_tool import getdata
 #%%
 all_charge_records,all_discharge_records,charge_length,discharge_length = getdata(
     path = r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat",
-    squence_length = 150,   # 充放电都建议150的长度，但是充电采样1min/次，放电1s/次
+    squence_length = 150,   # 充电都建议100的长度，但是充电采样1min/次，放电1s/次
     expand_multiple = 10,
     output_type=["C","D"]
     )
