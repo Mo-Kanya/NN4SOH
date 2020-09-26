@@ -1,5 +1,5 @@
     # coding:UTF-8
-def getdata(path=None,squence_length = 500,expand_multiple = 4):
+def getdata(path=None,squence_length = 500,expand_multiple = 4,output_type=["C","D"]):
     #%% 导入模块
     from numpy.lib.function_base import average
     import scipy.io as scio
@@ -7,7 +7,6 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
     import matplotlib.pyplot as plt
     from scipy import interpolate
     import random
-    squence_length = 500
     # %% [markdown] 随机放电 RW
     # # 随机放电 RW
 
@@ -151,7 +150,7 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
         def __init__(self):
             self.all_useful=[]
             self.merged_all_useful=[]
-            self.RW_cycles = [RW_cycle(idx) for idx in range(0,52)]
+            self.RW_cycles = [RW_cycle(idx) for idx in range(0,200)]
             self.cur = 0
         
         @property
@@ -183,7 +182,7 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
             return f'{self.num} infos, capacity={self.capacity:.3f}'
 
     # 记录的实例
-    cycle_records = [Cycle_record(a) for a in range(13)]
+    cycle_records = [Cycle_record(a) for a in range(50)]
     ref_idx = 0
     record = {x[0]:0 for x in np.unique(data["data"]["step"][0, 0]['comment'])} # 全局统计
 
@@ -326,11 +325,24 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
         for idx in range(cycle_records[ref_idx].data.num_RW_cycles):
             all_rw_cycles.append(cycle_records[ref_idx].data.RW_cycles[idx])
 
+    # 输出cycle长度等数据
+    charge_length = []
+    discharge_length = []
+    for rw_cycle in all_rw_cycles:
+        charge_length.append(rw_cycle.charge.shape[1])
+        discharge_length.append(rw_cycle.merged_discharge.shape[1])
+    
+    # plt.hist(charge_length)
+    # plt.show()
+    # plt.hist(discharge_length)
+    # plt.show()
+
+
     #%% 添加随机噪声，偏移
     def add_noise(array,noise_percent=0.02):
         time = array[0:2,:]
         result = np.zeros_like(array,dtype='float64')
-        for i in range(array.shape[0]):
+        for i in range(2,array.shape[0]):
             mean = array[i,:].mean()
             noise = np.random.randn(array.shape[1])*mean*noise_percent
             noise = noise - np.mean(noise)
@@ -391,25 +403,38 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4):
     all_charge_records = []
     all_discharge_records = []
     for rw_cycle in all_rw_cycles:
-        charge_record = SingleRecord('C')
-        charge_record.data = rw_cycle.charge[2:,:]
-        charge_record.SOH = rw_cycle.capacity / init_capacity
-        all_charge_records.append(charge_record)
+        # charge_record = SingleRecord('C')
+        # charge_record.data = rw_cycle.charge[2:,:]
+        # charge_record.SOH = rw_cycle.capacity / init_capacity
+        # all_charge_records.append(charge_record)
 
-        for i in range(rw_cycle.merged_discharge.shape[1]//squence_length-1):
-            discharge_record = SingleRecord('D')
-            discharge_record.data = rw_cycle.merged_discharge[2:,i*squence_length:(i+1)*squence_length]
-            discharge_record.SOH = rw_cycle.capacity / init_capacity
-            all_discharge_records.append(discharge_record)
-        if rw_cycle.merged_discharge.shape[1] % squence_length > squence_length*0.5:
-            discharge_record = SingleRecord('D')
-            discharge_record.data = rw_cycle.merged_discharge[2:,-squence_length:]
-            discharge_record.SOH = rw_cycle.capacity / init_capacity
-            all_discharge_records.append(discharge_record)
+        if "charge" in output_type or "C" in output_type: 
+            for i in range(rw_cycle.charge.shape[1]//squence_length):
+                charge_record = SingleRecord('C')
+                charge_record.data = rw_cycle.charge[2:,i*squence_length:(i+1)*squence_length]
+                charge_record.SOH = rw_cycle.capacity / init_capacity
+                all_charge_records.append(charge_record)
+            if rw_cycle.charge.shape[1] - squence_length > 0 and rw_cycle.charge.shape[1] % squence_length > squence_length*0.5:
+                charge_record = SingleRecord('C')
+                charge_record.data = rw_cycle.charge[2:,-squence_length:]
+                charge_record.SOH = rw_cycle.capacity / init_capacity
+                all_charge_records.append(charge_record)
+
+        if "discharge" in output_type or "D" in output_type:
+            for i in range(rw_cycle.merged_discharge.shape[1]//squence_length):
+                discharge_record = SingleRecord('D')
+                discharge_record.data = rw_cycle.merged_discharge[2:,i*squence_length:(i+1)*squence_length]
+                discharge_record.SOH = rw_cycle.capacity / init_capacity
+                all_discharge_records.append(discharge_record)
+            if rw_cycle.merged_discharge.shape[1] - squence_length > 0 and rw_cycle.merged_discharge.shape[1] % squence_length > squence_length*0.5:
+                discharge_record = SingleRecord('D')
+                discharge_record.data = rw_cycle.merged_discharge[2:,-squence_length:]
+                discharge_record.SOH = rw_cycle.capacity / init_capacity
+                all_discharge_records.append(discharge_record)
 
 
-    return all_charge_records,all_discharge_records
+    return all_charge_records,all_discharge_records,charge_length,discharge_length
     #%% 
 #%%
 if __name__ == '__main__':
-    getdata(squence_length = 500,expand_multiple = 10)
+    getdata(squence_length = 150,expand_multiple = 10,output_type=["C","D"])
