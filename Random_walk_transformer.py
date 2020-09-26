@@ -17,7 +17,49 @@ from SAnD.utils.trainer import NeuralNetworkClassifier
 # dataFile = '/home/zhengshen/NN4SOH/dataset/ARC-FY/B0005'   # Modify this path
 # dataFile = '/Users/jason/NN4SOH/dataset/ARC-FY/B0005'
 # data = getdata(path=r'/Users/jason/NN4SOH/dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat')[1]
-data = getdata(path=r'/home/zhengshen/NN4SOH/dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat')[1]
+path_list = [
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Variable_Charge_Room_Temp_DataSet_2Post/data/Matlab/RW1.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Variable_Charge_Room_Temp_DataSet_2Post/data/Matlab/RW2.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Variable_Charge_Room_Temp_DataSet_2Post/data/Matlab/RW7.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Variable_Charge_Room_Temp_DataSet_2Post/data/Matlab/RW8.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Discharge_Room_Temp_DataSet_2Post/data/Matlab/RW3.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Discharge_Room_Temp_DataSet_2Post/data/Matlab/RW4.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Discharge_Room_Temp_DataSet_2Post/data/Matlab/RW5.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Discharge_Room_Temp_DataSet_2Post/data/Matlab/RW6.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Charge_Discharge_DataSet_2Post/data/Matlab/RW9.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Charge_Discharge_DataSet_2Post/data/Matlab/RW10.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Charge_Discharge_DataSet_2Post/data/Matlab/RW11.mat",
+    # r"./dataset/nasa/Battery_Uniform_Distribution_Charge_Discharge_DataSet_2Post/data/Matlab/RW12.mat",
+    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW13.mat",
+    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW14.mat",
+    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW15.mat",
+    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW16.mat",
+    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW17.mat",
+    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW18.mat",
+    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW19.mat",
+    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW20.mat",
+    r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW21.mat",
+    r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat",
+    r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW23.mat",
+    r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW24.mat",
+    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW25.mat",
+    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW26.mat",
+    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW27.mat",
+    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW28.mat",
+]
+
+all_charge_data = []
+all_discharge_data = []
+for path in path_list: 
+    charge_data,discharge_data,_,_ = getdata(
+        path = path,
+        squence_length = 100,
+        expand_multiple = 4,
+        output_type=["C","D"]
+        )
+    all_charge_data += charge_data
+    all_discharge_data += discharge_data
+data = all_discharge_data
 
 dt = []
 labels = []
@@ -67,7 +109,7 @@ test_loader = DataLoader(test_ds, batch_size=4)
 
 # Training
 in_feature = 3
-seq_len = 500
+seq_len = 100
 n_heads = 32
 factor = 32
 num_class = 1
