@@ -1,0 +1,6 @@
+Learning Rate: 0.0001   Error with epochs as follows:
+0.030246231704950333 0.003230634843930602 0.0019515977473929524 
+Learning Rate: 0.0001   Error with epochs as follows:
+0.005960165057331324 0.005871816538274288 
+Learning Rate: 0.0001   Error with epochs as follows:
+0.006433200556784868 

@@ -1,0 +1,14 @@
+Type: GRU
+
+hidden size: (16, 1), num_layers: (16, 2), error: 0.00039335194742307067
+
+hidden size: (16, 1), num_layers: (16, 2), error: 0.0005355204921215773
+
+hidden size: (16, 1), num_layers: (16, 2), error: 0.0005804045940749347
+Type: BiLSTM
+
+hidden size: (16, 1), num_layers: (16, 2), error: 0.0008011219906620681
+
+hidden size: (16, 1), num_layers: (16, 2), error: 0.0008112198556773365
+
+hidden size: (16, 1), num_layers: (16, 2), error: 0.0011344172526150942
