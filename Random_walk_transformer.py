@@ -16,44 +16,36 @@ from SAnD.utils.trainer import NeuralNetworkClassifier
 # Real Dataset Generator
 # dataFile = '/home/zhengshen/NN4SOH/dataset/ARC-FY/B0005'   # Modify this path
 # dataFile = '/Users/jason/NN4SOH/dataset/ARC-FY/B0005'
-data = getdata()[1]
-train_set = []
-valid_set = []
-test_set = []
-for i in range(5000):
-    if len(data[i].data[0]) == 500:
-        train_set.append(data[i])
-for i in range(5000, 6000):
-    if len(data[i].data[0]) == 500:
-        valid_set.append(data[i])
-for i in range(6000, 7000):
-    if len(data[i].data[0]) == 500:
-        test_set.append(data[i])
+# data = getdata(path=r'/Users/jason/NN4SOH/dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat')[1]
+data = getdata(path=r'/home/zhengshen/NN4SOH/dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat')[1]
 
-for i in range(len(data)):
+dt = []
+labels = []
+for i in range(7000):
+    dt.append(data[i].data.T)
+    labels.append(data[i].SOH)
+
+mm = MinMaxScaler()
+for i in range(len(dt)):
     mm = MinMaxScaler()
-    data[i] = mm.fit_transform(data[i])
-data = np.array(data)
-data = data[: , 0:400 ,:]
-print(data.shape)
-data=torch.from_numpy(data).type(torch.FloatTensor)
+    dt[i] = mm.fit_transform(dt[i])
+dt,labels = np.array(dt),np.array(labels)
+print(dt.shape)
+data=torch.from_numpy(dt).type(torch.FloatTensor)
 labels=torch.from_numpy(np.array(labels)).type(torch.FloatTensor)
 
-# data_set = list(zip(data, labels))
-# np.random.shuffle(data_set)
-# data, labels = data_set[0], data_set[1]
-x_train = data[:400]
-x_val = data[400: 450]
-x_test = data[450:]
-y_train = labels[:400]
-y_val = labels[400: 450]
-y_test = labels[450:]
+x_train = data[:5000]
+x_val = data[5000: 6000]
+x_test = data[6000:]
+y_train = labels[:5000]
+y_val = labels[5000: 6000]
+y_test = labels[6000:]
 train_ds = TensorDataset(x_train, y_train)
 val_ds = TensorDataset(x_val, y_val)
 test_ds = TensorDataset(x_test, y_test)
-train_loader = DataLoader(train_ds, batch_size=1)
-val_loader = DataLoader(val_ds, batch_size=1)
-test_loader = DataLoader(test_ds, batch_size=1)
+train_loader = DataLoader(train_ds, batch_size=4)
+val_loader = DataLoader(val_ds, batch_size=4)
+test_loader = DataLoader(test_ds, batch_size=4)
 
 # Fake Dataset Generater
 # x_train = torch.randn(1024, 256, 23)    # [N, seq_len, features]
@@ -75,7 +67,7 @@ test_loader = DataLoader(test_ds, batch_size=1)
 
 # Training
 in_feature = 3
-seq_len = 400
+seq_len = 500
 n_heads = 32
 factor = 32
 num_class = 1
