@@ -3,6 +3,7 @@ dataset/*.zip
 dataset/*.mat
 dataset/*.7z
 dataset/*/
+!dataset/statistics/
 
 
 
