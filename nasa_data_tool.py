@@ -150,7 +150,7 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4,output_type=["C",
         def __init__(self):
             self.all_useful=[]
             self.merged_all_useful=[]
-            self.RW_cycles = [RW_cycle(idx) for idx in range(0,52)]
+            self.RW_cycles = [RW_cycle(idx) for idx in range(0,150)]
             self.cur = 0
         
         @property
@@ -182,7 +182,7 @@ def getdata(path=None,squence_length = 500,expand_multiple = 4,output_type=["C",
             return f'{self.num} infos, capacity={self.capacity:.3f}'
 
     # 记录的实例
-    cycle_records = [Cycle_record(a) for a in range(13)]
+    cycle_records = [Cycle_record(a) for a in range(50)]
     ref_idx = 0
     record = {x[0]:0 for x in np.unique(data["data"]["step"][0, 0]['comment'])} # 全局统计
 
