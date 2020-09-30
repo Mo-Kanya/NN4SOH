@@ -30,26 +30,82 @@ path_list = [
     # r"./dataset/nasa/Battery_Uniform_Distribution_Charge_Discharge_DataSet_2Post/data/Matlab/RW10.mat",
     # r"./dataset/nasa/Battery_Uniform_Distribution_Charge_Discharge_DataSet_2Post/data/Matlab/RW11.mat",
     # r"./dataset/nasa/Battery_Uniform_Distribution_Charge_Discharge_DataSet_2Post/data/Matlab/RW12.mat",
-    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW13.mat",
-    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW14.mat",
-    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW15.mat",
-    r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW16.mat",
-    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW17.mat",
-    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW18.mat",
-    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW19.mat",
-    r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW20.mat",
-    r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW21.mat",
+
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW13.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW14.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW15.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW16.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW17.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW18.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW19.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW20.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW21.mat",
     r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat",
-    r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW23.mat",
-    r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW24.mat",
-    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW25.mat",
-    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW26.mat",
-    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW27.mat",
-    r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW28.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW23.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW24.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW25.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW26.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW27.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW28.mat",
 ]
 
+# all_charge_length=[]
+# all_discharge_length=[]
+# Cfig,Caxes = plt.subplots(4,4)
+# Dfig,Daxes = plt.subplots(4,4)
+# counter = 0
+# for path in path_list: 
+#     _,_,charge_length,discharge_length = getdata(
+#         path = path,
+#         squence_length = 1000,
+#         expand_multiple = 0,
+#         output_type=["C","D"]
+#         )
+#     all_charge_length += charge_length
+#     all_discharge_length += discharge_length
+
+#     Cax = Caxes[counter//4,counter%4]
+#     Cax.hist(charge_length)
+#     Cax.set_title(path.split('/')[-1])
+#     Cax.set_xlim(0,350)
+
+#     Dax = Daxes[counter//4,counter%4]
+#     Dax.hist(discharge_length)
+#     Dax.set_title(path.split('/')[-1])
+#     Dax.set_xlim(0,5000)
+#     counter +=1
+# plt.show()
+# # plt.hist(all_charge_length)
+# # plt.show()
+# # plt.hist(all_discharge_length)
+# # plt.show()
+
+# 用一下部分替换原来提取数据集的部分
+path_list = [
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW13.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW14.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW15.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_Room_Temp_DataSet_2Post/data/Matlab/RW16.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW17.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW18.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW19.mat",
+    # r"./dataset/nasa/RW_Skewed_High_Room_Temp_DataSet_2Post/data/Matlab/RW20.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW21.mat",
+    r"/Users/jason/NN4SOH/dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW22.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW23.mat",
+    # r"./dataset/nasa/RW_Skewed_Low_40C_DataSet_2Post/data/Matlab/RW24.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW25.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW26.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW27.mat",
+    # r"./dataset/nasa/RW_Skewed_High_40C_DataSet_2Post/data/Matlab/RW28.mat",
+]
 all_charge_data = []
 all_discharge_data = []
+inf=999999999.0
+# charge_range    = (min_V,min_C,min_T,max_V,max_C,max_T )   # max,min
+charge_range    =   [inf, inf,   inf,  -inf, -inf,  -inf]   # max,min
+# discharge_range = (min_V,min_C,min_T,max_V,max_C,max_T )
+discharge_range =   [inf, inf,   inf,  -inf, -inf,  -inf] 
 for path in path_list: 
     charge_data,discharge_data,_,_ = getdata(
         path = path,
@@ -59,29 +115,68 @@ for path in path_list:
         )
     all_charge_data += charge_data
     all_discharge_data += discharge_data
-data = all_discharge_data
+for charge_data in all_charge_data:
+    min_V,min_C,min_T = charge_data.data.min(axis=1)
+    max_V,max_C,max_T = charge_data.data.max(axis=1)
+    charge_range[0] = charge_range[0] if charge_range[0] < min_V else min_V
+    charge_range[1] = charge_range[1] if charge_range[1] < min_C else min_C
+    charge_range[2] = charge_range[2] if charge_range[2] < min_T else min_T
+    charge_range[3] = charge_range[3] if charge_range[3] > max_V else max_V
+    charge_range[4] = charge_range[4] if charge_range[4] > max_C else max_C
+    charge_range[5] = charge_range[5] if charge_range[5] > max_T else max_T
+for charge_data in all_charge_data:
+    charge_data.data = np.stack((
+                                    (charge_data.data[0] - charge_range[0])/(charge_range[3]-charge_range[0]),
+                                    (charge_data.data[1] - charge_range[1])/(charge_range[4]-charge_range[1]),
+                                    (charge_data.data[2] - charge_range[2])/(charge_range[5]-charge_range[2]),
+                                ),axis=0)
 
-dt = []
-labels = []
-for i in range(7000):
-    dt.append(data[i].data.T)
-    labels.append(data[i].SOH)
+for discharge_data in all_discharge_data:
+    min_V,min_C,min_T = discharge_data.data.min(axis=1)
+    max_V,max_C,max_T = discharge_data.data.max(axis=1)
+    discharge_range[0] = discharge_range[0] if discharge_range[0] < min_V else min_V
+    discharge_range[1] = discharge_range[1] if discharge_range[1] < min_C else min_C
+    discharge_range[2] = discharge_range[2] if discharge_range[2] < min_T else min_T
+    discharge_range[3] = discharge_range[3] if discharge_range[3] > max_V else max_V
+    discharge_range[4] = discharge_range[4] if discharge_range[4] > max_C else max_C
+    discharge_range[5] = discharge_range[5] if discharge_range[5] > max_T else max_T
+dt=[]
+for discharge_data in all_discharge_data:
+    discharge_data.data = np.stack((
+                                    (discharge_data.data[0] - discharge_range[0])/(discharge_range[3]-discharge_range[0]),
+                                    (discharge_data.data[1] - discharge_range[1])/(discharge_range[4]-discharge_range[1]),
+                                    (discharge_data.data[2] - discharge_range[2])/(discharge_range[5]-discharge_range[2]),
+                                ),axis=0)
+    dt.append(discharge_data.data)
 
-mm = MinMaxScaler()
-for i in range(len(dt)):
-    mm = MinMaxScaler()
-    dt[i] = mm.fit_transform(dt[i])
-dt,labels = np.array(dt),np.array(labels)
-print(dt.shape)
-data=torch.from_numpy(dt).type(torch.FloatTensor)
-labels=torch.from_numpy(np.array(labels)).type(torch.FloatTensor)
 
-x_train = data[:5000]
-x_val = data[5000: 6000]
-x_test = data[6000:]
-y_train = labels[:5000]
-y_val = labels[5000: 6000]
-y_test = labels[6000:]
+x_train = []
+y_train = []
+x_val = []
+y_val = []
+x_test = []
+y_test = []
+for i in range(14000):
+    if len(all_discharge_data[i].data[0]) == 100:
+        x_train.append(all_discharge_data[i].data.T)
+        y_train.append(all_discharge_data[i].SOH)
+for i in range(14000, 18000):
+    if len(all_discharge_data[i].data[0]) == 100:
+        x_val.append(all_discharge_data[i].data.T)
+        y_val.append(all_discharge_data[i].SOH)
+for i in range(18000, 20000):
+    if len(all_discharge_data[i].data[0]) == 100:
+        x_test.append(all_discharge_data[i].data.T)
+        y_test.append(all_discharge_data[i].SOH)
+
+
+x_train=torch.from_numpy(np.array(x_train)).type(torch.FloatTensor)
+y_train=torch.from_numpy(np.array(y_train)).type(torch.FloatTensor)
+x_val=torch.from_numpy(np.array(x_val)).type(torch.FloatTensor)
+y_val=torch.from_numpy(np.array(y_val)).type(torch.FloatTensor)
+x_test=torch.from_numpy(np.array(x_test)).type(torch.FloatTensor)
+y_test=torch.from_numpy(np.array(y_test)).type(torch.FloatTensor)
+
 train_ds = TensorDataset(x_train, y_train)
 val_ds = TensorDataset(x_val, y_val)
 test_ds = TensorDataset(x_test, y_test)
