@@ -1,0 +1,27 @@
+type: GRU	hid_size: 16	num_layers: 1	batch_size: 4	lr: 0.0002	epochs:24	error: 0.00040089013054966927
+
+type: GRU	hid_size: 16	num_layers: 1	batch_size: 8	lr: 0.0003	epochs:18	error: 0.00039722814108245075
+
+type: GRU	hid_size: 32	num_layers: 1	batch_size: 2	lr: 0.00015	epochs:30	error: 0.0004088732530362904
+
+type: GRU	hid_size: 32	num_layers: 1	batch_size: 4	lr: 0.0002	epochs:24	error: 0.0004230263293720782
+
+type: GRU	hid_size: 32	num_layers: 1	batch_size: 8	lr: 0.0003	epochs:18	error: 0.000387449748814106
+
+type: GRU	hid_size: 64	num_layers: 1	batch_size: 2	lr: 0.00015	epochs:30	error: 0.00040233167237602174
+
+type: GRU	hid_size: 64	num_layers: 1	batch_size: 4	lr: 0.0002	epochs:24	error: 0.0004514714819379151
+
+type: GRU	hid_size: 64	num_layers: 1	batch_size: 8	lr: 0.0003	epochs:18	error: 0.00035647235927172005
+
+type: GRU	hid_size: 32	num_layers: 2	batch_size: 2	lr: 0.00015	epochs:30	error: 0.0003997491439804435
+
+type: GRU	hid_size: 32	num_layers: 2	batch_size: 4	lr: 0.0002	epochs:24	error: 0.0004175767535343766
+
+type: GRU	hid_size: 32	num_layers: 2	batch_size: 8	lr: 0.0003	epochs:18	error: 0.0003716360661201179
+
+type: GRU	hid_size: 64	num_layers: 2	batch_size: 2	lr: 0.00015	epochs:30	error: 0.00040777522372081876
+
+type: GRU	hid_size: 64	num_layers: 2	batch_size: 4	lr: 0.0002	epochs:24	error: 0.000388321524951607
+
+type: GRU	hid_size: 64	num_layers: 2	batch_size: 8	lr: 0.0003	epochs:18	error: 0.00039526159525848925

@@ -1,0 +1,22 @@
+
+type: BiLSTM	hid_size: 16	num_layers: 1	batch_size: 4	lr: 0.0002	epochs:24	error: 0.00553172267973423
+
+type: BiLSTM	hid_size: 16	num_layers: 1	batch_size: 8	lr: 0.0003	epochs:18	error: 0.005530266091227531
+
+type: BiLSTM	hid_size: 32	num_layers: 1	batch_size: 2	lr: 0.00015	epochs:30	error: 0.005528196692466736
+
+type: BiLSTM	hid_size: 32	num_layers: 1	batch_size: 4	lr: 0.0002	epochs:24	error: 0.0055307019501924515
+
+type: BiLSTM	hid_size: 32	num_layers: 1	batch_size: 8	lr: 0.0003	epochs:18	error: 0.00552982185035944
+
+type: BiLSTM	hid_size: 64	num_layers: 1	batch_size: 2	lr: 0.00015	epochs:30	error: 0.0055282688699662685
+
+*type: BiLSTM	hid_size: 64	num_layers: 1	batch_size: 4	lr: 0.0002	epochs:24	error: 0.005528058856725693
+
+type: BiLSTM	hid_size: 64	num_layers: 1	batch_size: 8	lr: 0.0003	epochs:18	error: 0.005529213231056929
+
+type: BiLSTM	hid_size: 32	num_layers: 2	batch_size: 2	lr: 0.00015	epochs:30	error: 0.005528329871594906
+
+type: BiLSTM	hid_size: 32	num_layers: 2	batch_size: 4	lr: 0.0002	epochs:24	error: 0.005529588554054499
+
+type: BiLSTM	hid_size: 32	num_layers: 2	batch_size: 8	lr: 0.0003	epochs:18	error: 0.005528729408979416
